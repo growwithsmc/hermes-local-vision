@@ -1,7 +1,7 @@
 # Blip - Local Vision for Hermes Agent
 
 <p align="center">
-  <img src="assets/logo.png" alt="Blip - Local Vision for Hermes" width="400">
+  <img src="assets/logo.png" alt="Blip - Local Vision for Hermes" width="650">
 </p>
 
 <p align="center">
