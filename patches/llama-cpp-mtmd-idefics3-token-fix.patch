@@ -1,0 +1,28 @@
+From: Hermes Agent (smolVLM vision server setup)
+Date: 2026-05-24
+Subject: Fix SmolVLM IDEfics3 token lookup — remove <global-img> from start marker
+
+SmolVLM's GGUF from ggml-org/SmolVLM-Instruct-GGUF doesn't include the
+`<global-img>` special token in its vocabulary. The llama.cpp IDEfics3
+multimodal projector code tries to look up this token at initialization,
+gets LLAMA_TOKEN_NULL back, and stores it in the overview image start
+token vector. When an image is processed, the null token is pushed into
+the server token stream, throwing "Invalid token" 400 errors.
+
+Fix: remove `<global-img>` from the fallback chain. The remaining token
+`<fake_token_around_image>` exists in the vocabulary (token ID 49152)
+and is sufficient for correct image boundary marking.
+
+Upstream PR reference: (not yet submitted)
+
+--- a/tools/mtmd/mtmd.cpp
++++ b/tools/mtmd/mtmd.cpp
+@@ -369,7 +369,7 @@
+                 {
+                     // https://github.com/huggingface/transformers/blob/a42ba80fa520c784c8f11a973ca9034e5f859b79/src/transformers/models/idefics3/processing_idefics3.py#L192-L215
+                     slice_tmpl         = MTMD_SLICE_TMPL_IDEFICS3;
+-                    tok_ov_img_start   = {lookup_token("\n\n"), lookup_token("<fake_token_around_image>"), lookup_token("<global-img>")};
++                    tok_ov_img_start   = {lookup_token("<fake_token_around_image>")};
+                     tok_ov_img_end     = {lookup_token("<fake_token_around_image>")};
+                     tok_row_end        = {lookup_token("\n")};
+                     sli_img_start_tmpl = "<fake_token_around_image><row_%d_col_%d>";

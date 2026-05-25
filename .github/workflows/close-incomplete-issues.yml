@@ -1,0 +1,55 @@
+name: Close incomplete issues
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  check-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if issue has required fields
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const required = [
+              'Blip version',
+              'Operating System',
+              'Hermes version',
+              'GPU / Hardware',
+              'Vision Model',
+              'What happened?',
+              'Relevant output',
+              'Hermes config',
+            ];
+            const missing = required.filter(f => !body.includes(f));
+            if (missing.length > 0) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `This issue is missing required fields: ${missing.join(', ')}.\n\nPlease fill out the bug report template completely. This issue will be closed in 20 minutes if not updated.`
+              });
+              await new Promise(r => setTimeout(r, 1200000)); // 20 minutes
+              const updated = await github.rest.issues.get({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              });
+              const updatedBody = updated.data.body || '';
+              const stillMissing = required.filter(f => !updatedBody.includes(f));
+              if (stillMissing.length > 0) {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: 'Closing due to incomplete template. Please open a new issue with all required fields.'
+                });
+                await github.rest.issues.update({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  state: 'closed'
+                });
+              }
+            }

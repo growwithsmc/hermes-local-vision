@@ -1,0 +1,27 @@
+# Dependencies
+.llama.cpp/
+build/
+
+# Bytecode
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Model files (too large for git)
+*.gguf
+
+# Logs
+*.log
+
+# Environment
+.env
+AUDIT-FINDINGS.md

@@ -1,0 +1,87 @@
+name: Bug Report
+description: Report a problem with Blip
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report.
+        Please provide ALL requested details or the issue will be closed.
+
+  - type: input
+    id: version
+    attributes:
+      label: Blip version
+      description: Run `git log --oneline -1` in the blip repo directory
+      placeholder: e.g. v1 or commit hash
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows 10/11
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: hermes-version
+    attributes:
+      label: Hermes version
+      description: Run `hermes --version` or `hermes config path`
+      placeholder: e.g. latest from git
+    validations:
+      required: true
+
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU / Hardware
+      description: Run `nvidia-smi` or specify your hardware
+      placeholder: e.g. RTX 4070, Apple M3, CPU only
+    validations:
+      required: true
+
+  - type: dropdown
+    id: model
+    attributes:
+      label: Vision Model
+      options:
+        - SmolVLM-Instruct (default)
+        - Qwen2.5-VL-7B
+        - Gemma 3 4B
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant output
+      description: Run `bash ~/.hermes/scripts/blip.sh status` and paste the output here
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Hermes config (vision section)
+      description: Run `grep -A 6 "vision:" ~/.hermes/config.yaml` and paste
+      render: yaml
+    validations:
+      required: true

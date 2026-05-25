@@ -1,0 +1,6 @@
+name: vision-context
+version: "1.0.0"
+description: Include recent conversation history as context in auxiliary vision requests. Configurable via auxiliary.vision.mode and auxiliary.vision.context_messages.
+author: "ShaiBit Solutions (hello@shaibit.net)"
+config:
+  enabled: true

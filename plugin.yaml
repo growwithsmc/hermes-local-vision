@@ -1,0 +1,8 @@
+name: blip-vision
+version: "2.1.0"
+description: "Local vision server for Hermes - auto-selects SmolVLM 2B, Gemma 3 4B, or Qwen2.5-VL-7B based on VRAM. Runs via llama.cpp. Zero cloud. Auth proxy. Image compression. Multi-image splitting. Conversation context."
+author: "ShaiBit Solutions (hello@shaibit.net)"
+config:
+  enabled: true
+  port: 11788
+  model: Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf
